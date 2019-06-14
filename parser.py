@@ -88,11 +88,8 @@ def p_small_stmt(p):
 
 def p_robot_operators(p):
     ''' robot_operators : COMMAND robot_commands
-                        | variant_call EQUALS COMMAND robot_commands
                         '''
-    if len(p) > 3:
-        p[0] = ast.RobotOperator(p[1],p[4])
-    else: p[0] = ast.RobotOperator(None,p[2])
+    p[0] = ast.RobotOperator(None,p[2])
 
 
 def p_robot_comm(p):
@@ -143,7 +140,6 @@ def p_compound_stmt(p):
                      | while_stmt
                      | until_stmt"""
     p[0] = p[1]
-
 
 def p_if_stmt_1(p):
     #              1         2       3     4          5     6
@@ -233,7 +229,6 @@ def p_empty(p):
     """empty : """
     p[0] = ast.EmptyStatement()
 
-
 def p_identifier(p):
     ''' identifier : ID '''
     # print("Identifier", p[1])
@@ -256,10 +251,10 @@ def p_type_specifier(p):
     p[0] = p[1]
 
 def p_variant_call(p):
-    ''' variant_call : identifier LPAREN digit COMMA digit RPAREN
-                     | identifier LPAREN variant_call COMMA variant_call RPAREN
-                     | identifier LPAREN digit COMMA variant_call RPAREN
-                     | identifier LPAREN variant_call COMMA digit RPAREN'''
+    ''' variant_call : identifier LBRACKET digit COMMA digit RBRACKET
+                     | identifier LBRACKET variant_call COMMA variant_call RBRACKET
+                     | identifier LBRACKET digit COMMA variant_call RBRACKET
+                     | identifier LBRACKET variant_call COMMA digit RBRACKET'''
     p[0] = ast.VariantCall(p[1], p[3], p[5])
 
 def p_variant_to_func(p):
@@ -270,17 +265,18 @@ def p_variant_assignment(p):
     '''variant_assignment : variant_call EQUALS variant_call
                           | variant_call EQUALS var_var
                           | variant_call EQUALS unary_expression
-                          | variant_call EQUALS binary_expression'''
+                          | variant_call EQUALS binary_expression
+                          | variant_call EQUALS robot_operators'''
     p[0] = ast.VariantAssignment(p[1],p[3])
 
 def p_variable(p):
     #                1         2        3     4     5     6
-    ''' variable : VARIANT identifier LPAREN digit COMMA digit RPAREN'''
+    ''' variable : VARIANT identifier LBRACKET digit COMMA digit RBRACKET'''
     p[0] = ast.Variant(p[2], p[4], p[6])
 
 def p_variable_1(p):
     #                1           2      3     4     5       6    7        8    9         10       11
-    ''' variable : VARIANT identifier LPAREN digit COMMA digit RPAREN EQUALS LBRACE var_full_list RBRACE '''
+    ''' variable : VARIANT identifier LBRACKET digit COMMA digit RBRACKET EQUALS LBRACE var_full_list RBRACE '''
     #print(p[10])
     p[0] = ast.Variant(p[2],p[4],p[6],p[10])
     #print("p_variable_1")
@@ -293,8 +289,10 @@ def p_var_var(p):
 
 def p_print(p):
     ''' print : PRINT expression
-              | PRINT identifier'''
+              | PRINT identifier
+              | PRINT variant_call'''
     p[0] = ast.Printed(p[2])
+
 
 def p_var_list(p):
     ''' var_list : var_list COMMA var_var

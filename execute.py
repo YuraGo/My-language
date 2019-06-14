@@ -53,13 +53,13 @@ import visit2_0
 
 # data = '''
 # VARIANT asd(2,2) = { {FALSE,'tr',0 ; TRUE,'asf',46},{FALSE; TRUE,'rrrr',456} }
-# WHILE asd(0,1) :
+# UNTIL asd(0,1) :
 #     asd(0,0) = asd(0,0) + 1
 #     IFHIGH asd(0,0) THEN 5:
 #         asd(0,1) = FALSE
 #     ENDIF
 #     PRINT asd
-# ENDW
+# ENDU
 # '''
 
 # data = '''
@@ -140,26 +140,8 @@ import visit2_0
 # PRINT qwe
 # '''
 
-# def factorial(x):
-#     if x==1:
-#         return 1
-#     else:
-#         z = x
-#         x-=1
-#         y = factorial(x)
-#         y*=z
-#         return y
-#
-# f=factorial(5)
-# print ("factorial of 5 is ",f)
 
 
-
-# data = '''
-# FUNC gad:
-# VARIANT()
-# ENDFUNC
-# '''
 
 # data = '''
 # VARIANT tr(1,1) = {{3,'factorial',TRUE}}
@@ -178,39 +160,268 @@ import visit2_0
 
 
 # data = '''
+# FUNC Factor:
+# VARIANT new[1,1]
+# new = PARAM
+# new[0,0] = new[0,0] - 1
+# PRINT new
+# IFZERO new[0,0]:
+# PRINT new
+# RETURN new
+# ENDIF
+# new = CALL Factor (new)
+# ENDFUNC
+#
+# VARIANT tr[1,1] = {{3,'factorial',TRUE}}
+# PRINT tr
+# tr = CALL Factor (tr)
+# PRINT tr
+# '''
+
+
+# data = '''
+# FUNC Factor:
+# VARIANT new[1,1]
+# new = PARAM
+# new[0,0] = new[0,0] - 1
+# PRINT new
+# RETURN new
+# ENDFUNC
+#
+# VARIANT tr[1,1] = {{3,'factorial',TRUE}}
+# PRINT tr
+# tr = CALL Factor (tr)
+# PRINT tr
+# '''
+
+
+# data = '''
 # FUNC factor:
-# VARIANT count(1,1)
-# VARIANT qwe(1,1)
-# VARIANT new(1,1)
+# VARIANT count[1,1]
+# VARIANT qwe[1,1]
+# VARIANT new[1,1]
 # count = PARAM
-# PRINT count
-# qwe(0,0) = count(0,0)
-# IFNZERO (count(0,0)-1):
-#     count(0,0) = count(0,0) - 1
-#     PRINT count
+# qwe[0,0] = count[0,0]
+# IFNZERO (count[0,0]-1):
+#     count[0,0] = count[0,0] - 1
 #     new = CALL factor (count)
-#     new(0,0) = new(0,0) * qwe(0,0)
+#     new[0,0] = new[0,0] * qwe[0,0]
 #     RETURN new
 # ENDIF
-# IFNZERO (count(0,0)-1):
+# IFZERO (count[0,0]-1):
 # RETURN count
 # ENDIF
 # ENDFUNC
 #
-# VARIANT tr(1,1) = {{3,'factorial',TRUE}}
+# VARIANT tr[1,1] = {{7,'factorial',TRUE}}
 # PRINT tr
 # tr = CALL factor (tr)
 # PRINT tr
 # '''
 
+
+# def factorial(count):
+#     if count==1:
+#         return 1
+#     else:
+#         qwe = count
+#         count-=1
+#         new = factorial(count)
+#         new*=qwe
+#     return new
+#
+# f = factorial(7)
+# print ("factorial of 5 is ",f)
+
+
+# data = '''
+# VARIANT com[1,1] = { {'LEFT LOOKDOWN',TRUE,2} }
+# VARIANT str[2,2] = { {'asd www zxc 56 asd'},{'www',FALSE,88;99} }
+# com[0,0] = com[0,0] + ' DOWN'
+# PRINT str
+# str[2,0] = COMMAND com[0,0]
+# str[3,0] = COMMAND 'LOOKRIGHT'
+# str[4,0] = COMMAND 'LOOKLEFT'
+# str[5,0] = COMMAND 'LOOKUP'
+# PRINT str
+# PRINT map
+# '''
+
 data = '''
-VARIANT card(3,3)
-VARIANT com(1,1) = { {'UP RIGHT RIGHT',TRUE,2},{4} }
-VARIANT str(1,1) = { {'asd www zxc 56 asd'} }
+VARIANT lookR[2,1] = { {'LOOKRIGHT',2,FALSE},{'RIGHT',2,TRUE} }
+VARIANT lookL[2,1] = { {'LOOKLEFT',2,FALSE},{'LEFT',2,TRUE} }
+VARIANT lookD[2,1] = { {'LOOKDOWN',2,FALSE},{'DOWN',2,TRUE} }
+VARIANT lookU[2,1] = { {'LOOKUP',2,FALSE},{'UP',2,TRUE} }
+VARIANT pathArr[9,7]
+VARIANT cicl[2,1] = {{TRUE,0,''},{TRUE,0,''}}
+VARIANT countStr[1,1] = {{0,TRUE}}
+VARIANT countRow[1,1] = {{0,TRUE}}
+VARIANT help[1,1]
+VARIANT extCord[1,2] = {{TRUE,'', 7; TRUE,'',1}}
+VARIANT maxY[1,1] = {{9,'',TRUE}}
+VARIANT maxX[1,1] = {{7,'',FALSE}}
+VARIANT check[1,1]
+
+cicl[1,0] = maxY[0,0] * maxX[0,0]
+PRINT cicl
+pathArr[2,2] = 'BOT'
+VARIANT cord[1,2] = { {2,FALSE,'' ; 2,FALSE,''} }
+VARIANT weight[1,1] = {{1,'',TRUE}}
+
 PRINT map
-COMMAND com(0,0)
+WHILE cicl[0,0]:
+    weight[0,0] = weight[0,0] + 1
+    WHILE countStr[0,0]:
+        WHILE countRow[0,0]:
+        help[0,0] = weight[0,0] - 1
+            IFZERO (fillmap[countStr[0,0], countRow[0,0]] - help[0,0]):
+
+                IFHIGH countStr[0,0] THEN 0:
+                    help[0,0] = countStr[0,0]
+                    help[0,0] = help[0,0] - 1
+                    IFZERO fillmap[ help[0,0], countRow[0,0] ]:
+                        fillmap[ help[0,0], countRow[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+                IFLESS countStr[0,0] THEN (maxY[0,0] - 1):
+                help[0,0] = countStr[0,0]
+                help[0,0] = help[0,0] + 1
+                    IFZERO fillmap[ help[0,0], countRow[0,0] ]:
+                        fillmap[ help[0,0], countRow[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+                IFHIGH countRow[0,0] THEN 0:
+                help[0,0] = countRow[0,0]
+                help[0,0] = help[0,0] - 1
+                    IFZERO fillmap[ countStr[0,0], help[0,0] ]:
+
+                        fillmap[ countStr[0,0], help[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+
+                IFLESS countRow[0,0] THEN (maxX[0,0] - 1):
+                help[0,0] = countRow[0,0]
+                help[0,0] = help[0,0] + 1
+                    IFZERO fillmap[ countStr[0,0], help[0,0] ]:
+                        fillmap[ countStr[0,0], help[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+
+                help[0,0] = countStr[0,0] - extCord[0,0]
+                help[0,1] = countRow[0,0] - extCord[0,1]
+                IFLESS help[0,0] THEN 0:
+                    help[0,0] = - help[0,0]
+                ENDIF
+                IFLESS help[0,1] THEN 0:
+                    help[0,1] = - help[0,1]
+                ENDIF
+                help[0,0] = help[0,0] + help[0,1]
+                IFZERO (help[0,0] - 1):
+                    PRINT cicl
+                    fillmap[extCord[0,0],extCord[0,1]] = weight[0,0]
+                    cicl[0,0] = FALSE
+                ENDIF
+            ENDIF
+        countRow[0,0] = countRow[0,0] + 1
+        IFNLESS countRow[0,0] THEN maxX[0,0]:
+            countRow[0,0] = FALSE
+        ENDIF
+        ENDW
+
+    countRow[0,0] = 0
+    countRow[0,0] = TRUE
+    countStr[0,0] = countStr[0,0] + 1
+    IFNLESS countStr[0,0] THEN maxY[0,0]:
+        countStr[0,0] = FALSE
+    ENDIF
+    ENDW
+
+    countStr[0,0] = 0
+    countStr[0,0] = TRUE
+    cicl[0,0] = cicl[0,0] + 1
+    IFNLESS cicl[0,0] THEN cicl[1,0]:
+        cicl[0,0] = FALSE
+    ENDIF
+ENDW
+fillmap[7,1] = 'EXIT'
+PRINT fillmap
+
+VARIANT skip[1,1] = {{TRUE,0,''}}
+PRINT weight
+VARIANT com[1,1]
+
+
+
+WHILE weight[0,0]:
+    weight[0,0] = weight[0,0] - 1
+    skip[0,0] = 0
+    IFHIGH extCord[0,0] THEN 0:
+        help[0,0] = extCord[0,0]
+        help[0,0] = help[0,0] - 1
+        IFZERO fillmap[ help[0,0], extCord[0,1] ] - weight[0,0]:
+            extCord[0,0] = extCord[0,0] - 1
+            com[0,0] = com[0,0] + 'DOWN '
+            skip[0,0] = 1
+        ENDIF
+    ENDIF
+    IFZERO skip[0,0]:
+        help[0,0] = maxY[0,0] - 1
+        IFLESS extCord[0,0] THEN help[0,0]:
+            help[0,0] = extCord[0,0]
+            help[0,0] = help[0,0] + 1
+            IFZERO fillmap[ help[0,0], extCord[0,1]] - weight[0,0]:
+                extCord[0,0] = extCord[0,0] + 1
+                com[0,0] = com[0,0] + 'UP '
+                skip[0,0] = 1
+            ENDIF
+        ENDIF
+    ENDIF
+
+    IFZERO skip[0,0]:
+
+        IFHIGH extCord[0,1] THEN 0:
+            help[0,0] = extCord[0,1]
+            help[0,0] = help[0,0] - 1
+            IFZERO fillmap[ extCord[0,0],  help[0,0]] - weight[0,0]:
+                extCord[0,1] = extCord[0,1] - 1
+                com[0,0] = com[0,0] + 'LEFT '
+                skip[0,0] = 1
+            ENDIF
+        ENDIF
+    ENDIF
+
+    IFZERO skip[0,0]:
+        help[0,0] = maxX[0,0] - 1
+        IFLESS extCord[0,1] THEN help[0,0]:
+            help[0,0] = extCord[0,1]
+            help[0,0] = help[0,0] + 1
+            IFZERO fillmap[ extCord[0,0], help[0,0] ] - weight[0,0]:
+                extCord[0,1] = extCord[0,1] + 1
+                com[0,0] = com[0,0] + 'RIGHT '
+            ENDIF
+        ENDIF
+    ENDIF
+
+IFZERO weight[0,0]:
+    weight[0,0] = FALSE
+ENDIF
+
+ENDW
+
+PRINT com[0,0]
 PRINT map
 '''
+
+
+
 
 result = build_tree(data)
 #print(result)
@@ -219,4 +430,4 @@ exec = visit2_0.bypass_ast()
 exec.Read()
 exec.visit(result)
 #exec.Print()
-print(exec.decl_buf)
+#print(exec.decl_buf)
