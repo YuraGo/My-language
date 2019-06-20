@@ -143,14 +143,15 @@ import visit2_0
 
 
 
-data = '''
-VARIANT tr[1],1] = {{3,'factorial',TRUE}}
-tr[0,0] = tr[0,0] * tr[0,0]
-tr[0,0] = tr[0,0] + ' LOOK'
-tr[0,0] = tr[0,0] + ' UP'
-tr[0,0] = tr[0,0] + ' DOWN'
-PRINT tr
-'''
+# data = '''
+# VARIANT tr[1,1] = {{3,'factorial ',TRUE}}
+# tr[0,0] = tr[0,0] * tr[0,0]
+# tr[0,0] = tr[0,0] + 'LOOK '
+#
+#
+# PRINT tr
+#
+# '''
 
 # data = '''
 # VARIANT tr(1,1) = {{0,'factorial',TRUE}}
@@ -237,191 +238,203 @@ PRINT tr
 # print ("factorial of 5 is ",f)
 
 
-# data = '''
-# VARIANT com[1,1] = { {'LEFT LOOKDOWN',TRUE,2} }
-# VARIANT str[2,2] = { {'asd www zxc 56 asd'},{'www',FALSE,88;99} }
-# com[0,0] = com[0,0] + ' DOWN'
-# PRINT str
-# str[2,0] = COMMAND com[0,0]
-# str[3,0] = COMMAND 'LOOKRIGHT'
-# str[4,0] = COMMAND 'LOOKLEFT'
-# str[5,0] = COMMAND 'LOOKUP'
-# PRINT str
-# PRINT map
-# '''
+data = '''
+VARIANT com[1,1] = { {'LEFT LOOKDOWN',TRUE,2} }
+VARIANT str[2,2] = { {'asd www zxc 56 asd'},{'www',FALSE,88;99} }
+com[0,0] = com[0,0] + ' DOWN'
+PRINT str
+str[2,0] = COMMAND com[0,0]
+str[3,0] = COMMAND 'LOOKRIGHT'
+str[4,0] = COMMAND 'LOOKLEFT'
+str[5,0] = COMMAND 'LOOKUP'
+PRINT str
+PRINT map
+'''
 
-# data = '''
-# VARIANT lookR[2,1] = { {'LOOKRIGHT',2,FALSE},{'RIGHT',2,TRUE} }
-# VARIANT lookL[2,1] = { {'LOOKLEFT',2,FALSE},{'LEFT',2,TRUE} }
-# VARIANT lookD[2,1] = { {'LOOKDOWN',2,FALSE},{'DOWN',2,TRUE} }
-# VARIANT lookU[2,1] = { {'LOOKUP',2,FALSE},{'UP',2,TRUE} }
-# VARIANT pathArr[9,7]
-# VARIANT cicl[2,1] = {{TRUE,0,''},{TRUE,0,''}}
-# VARIANT countStr[1,1] = {{0,TRUE}}
-# VARIANT countRow[1,1] = {{0,TRUE}}
-# VARIANT help[1,1]
-# VARIANT extCord[1,2] = {{TRUE,'', 7; TRUE,'',1}}
-# VARIANT maxY[1,1] = {{9,'',TRUE}}
+# VARIANT extCord[1,2] = {{TRUE,'', 9; TRUE,'',5}}
+# VARIANT maxY[1,1] = {{11,'',TRUE}}
 # VARIANT maxX[1,1] = {{7,'',FALSE}}
-# VARIANT check[1,1]
-#
-# cicl[1,0] = maxY[0,0] * maxX[0,0]
-# PRINT cicl
-# pathArr[2,2] = 'BOT'
-# VARIANT cord[1,2] = { {2,FALSE,'' ; 2,FALSE,''} }
-# VARIANT weight[1,1] = {{1,'',TRUE}}
-#
-# PRINT map
-# WHILE cicl[0,0]:
-#     weight[0,0] = weight[0,0] + 1
-#     WHILE countStr[0,0]:
-#         WHILE countRow[0,0]:
-#         help[0,0] = weight[0,0] - 1
-#             IFZERO (fillmap[countStr[0,0], countRow[0,0]] - help[0,0]):
-#
-#                 IFHIGH countStr[0,0] THEN 0:
-#                     help[0,0] = countStr[0,0]
-#                     help[0,0] = help[0,0] - 1
-#                     IFZERO fillmap[ help[0,0], countRow[0,0] ]:
-#                         fillmap[ help[0,0], countRow[0,0] ] = weight[0,0]
-#
-#                     ENDIF
-#                 ENDIF
-#
-#                 IFLESS countStr[0,0] THEN (maxY[0,0] - 1):
-#                 help[0,0] = countStr[0,0]
-#                 help[0,0] = help[0,0] + 1
-#                     IFZERO fillmap[ help[0,0], countRow[0,0] ]:
-#                         fillmap[ help[0,0], countRow[0,0] ] = weight[0,0]
-#
-#                     ENDIF
-#                 ENDIF
-#
-#                 IFHIGH countRow[0,0] THEN 0:
-#                 help[0,0] = countRow[0,0]
-#                 help[0,0] = help[0,0] - 1
-#                     IFZERO fillmap[ countStr[0,0], help[0,0] ]:
-#
-#                         fillmap[ countStr[0,0], help[0,0] ] = weight[0,0]
-#
-#                     ENDIF
-#                 ENDIF
-#
-#
-#                 IFLESS countRow[0,0] THEN (maxX[0,0] - 1):
-#                 help[0,0] = countRow[0,0]
-#                 help[0,0] = help[0,0] + 1
-#                     IFZERO fillmap[ countStr[0,0], help[0,0] ]:
-#                         fillmap[ countStr[0,0], help[0,0] ] = weight[0,0]
-#
-#                     ENDIF
-#                 ENDIF
-#
-#
-#                 help[0,0] = countStr[0,0] - extCord[0,0]
-#                 help[0,1] = countRow[0,0] - extCord[0,1]
-#                 IFLESS help[0,0] THEN 0:
-#                     help[0,0] = - help[0,0]
-#                 ENDIF
-#                 IFLESS help[0,1] THEN 0:
-#                     help[0,1] = - help[0,1]
-#                 ENDIF
-#                 help[0,0] = help[0,0] + help[0,1]
-#                 IFZERO (help[0,0] - 1):
-#                     PRINT cicl
-#                     fillmap[extCord[0,0],extCord[0,1]] = weight[0,0]
-#                     cicl[0,0] = FALSE
-#                 ENDIF
-#             ENDIF
-#         countRow[0,0] = countRow[0,0] + 1
-#         IFNLESS countRow[0,0] THEN maxX[0,0]:
-#             countRow[0,0] = FALSE
-#         ENDIF
-#         ENDW
-#
-#     countRow[0,0] = 0
-#     countRow[0,0] = TRUE
-#     countStr[0,0] = countStr[0,0] + 1
-#     IFNLESS countStr[0,0] THEN maxY[0,0]:
-#         countStr[0,0] = FALSE
-#     ENDIF
-#     ENDW
-#
-#     countStr[0,0] = 0
-#     countStr[0,0] = TRUE
-#     cicl[0,0] = cicl[0,0] + 1
-#     IFNLESS cicl[0,0] THEN cicl[1,0]:
-#         cicl[0,0] = FALSE
-#     ENDIF
-# ENDW
-# fillmap[7,1] = 'EXIT'
-# PRINT fillmap
-#
-# VARIANT skip[1,1] = {{TRUE,0,''}}
-# PRINT weight
-# VARIANT com[1,1]
-#
-#
-#
-# WHILE weight[0,0]:
-#     weight[0,0] = weight[0,0] - 1
-#     skip[0,0] = 0
-#     IFHIGH extCord[0,0] THEN 0:
-#         help[0,0] = extCord[0,0]
-#         help[0,0] = help[0,0] - 1
-#         IFZERO fillmap[ help[0,0], extCord[0,1] ] - weight[0,0]:
-#             extCord[0,0] = extCord[0,0] - 1
-#             com[0,0] = com[0,0] + 'DOWN '
-#             skip[0,0] = 1
-#         ENDIF
-#     ENDIF
-#     IFZERO skip[0,0]:
-#         help[0,0] = maxY[0,0] - 1
-#         IFLESS extCord[0,0] THEN help[0,0]:
-#             help[0,0] = extCord[0,0]
-#             help[0,0] = help[0,0] + 1
-#             IFZERO fillmap[ help[0,0], extCord[0,1]] - weight[0,0]:
-#                 extCord[0,0] = extCord[0,0] + 1
-#                 com[0,0] = com[0,0] + 'UP '
-#                 skip[0,0] = 1
-#             ENDIF
-#         ENDIF
-#     ENDIF
-#
-#     IFZERO skip[0,0]:
-#
-#         IFHIGH extCord[0,1] THEN 0:
-#             help[0,0] = extCord[0,1]
-#             help[0,0] = help[0,0] - 1
-#             IFZERO fillmap[ extCord[0,0],  help[0,0]] - weight[0,0]:
-#                 extCord[0,1] = extCord[0,1] - 1
-#                 com[0,0] = com[0,0] + 'LEFT '
-#                 skip[0,0] = 1
-#             ENDIF
-#         ENDIF
-#     ENDIF
-#
-#     IFZERO skip[0,0]:
-#         help[0,0] = maxX[0,0] - 1
-#         IFLESS extCord[0,1] THEN help[0,0]:
-#             help[0,0] = extCord[0,1]
-#             help[0,0] = help[0,0] + 1
-#             IFZERO fillmap[ extCord[0,0], help[0,0] ] - weight[0,0]:
-#                 extCord[0,1] = extCord[0,1] + 1
-#                 com[0,0] = com[0,0] + 'RIGHT '
-#             ENDIF
-#         ENDIF
-#     ENDIF
-#
-# IFZERO weight[0,0]:
-#     weight[0,0] = FALSE
-# ENDIF
-#
-# ENDW
-#
-# PRINT com[0,0]
-# PRINT map
-# '''
+
+data = '''
+
+VARIANT extCord[1,2] = {{TRUE,'', 7; TRUE,'',2}}
+VARIANT maxY[1,1] = {{9,'',TRUE}}
+VARIANT maxX[1,1] = {{7,'',FALSE}}
+
+
+VARIANT lookR[2,1] = { {'LOOKRIGHT',2,FALSE},{'RIGHT',2,TRUE} }
+VARIANT lookL[2,1] = { {'LOOKLEFT',2,FALSE},{'LEFT',2,TRUE} }
+VARIANT lookD[2,1] = { {'LOOKDOWN',2,FALSE},{'DOWN',2,TRUE} }
+VARIANT lookU[2,1] = { {'LOOKUP',2,FALSE},{'UP',2,TRUE} }
+VARIANT pathArr[9,7]
+VARIANT cicl[2,1] = {{TRUE,0,''},{TRUE,0,''}}
+VARIANT countStr[1,1] = {{0,TRUE}}
+VARIANT countRow[1,1] = {{0,TRUE}}
+VARIANT help[1,1]
+VARIANT check[1,1]
+
+cicl[1,0] = maxY[0,0] * maxX[0,0]
+PRINT cicl
+pathArr[2,2] = 'BOT'
+VARIANT cord[1,2] = { {2,FALSE,'' ; 2,FALSE,''} }
+VARIANT weight[1,1] = {{1,'FLOORS',TRUE}}
+
+PRINT map
+WHILE cicl[0,0]:
+    weight[0,0] = weight[0,0] + 1
+    WHILE countStr[0,0]:
+        WHILE countRow[0,0]:
+        help[0,0] = weight[0,0] - 1
+            IFZERO (fillmap[countStr[0,0], countRow[0,0]] - help[0,0]):
+
+                IFHIGH countStr[0,0] THEN 0:
+                    help[0,0] = countStr[0,0]
+                    help[0,0] = help[0,0] - 1
+                    IFZERO fillmap[ help[0,0], countRow[0,0] ]:
+
+                        fillmap[ help[0,0], countRow[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+                IFLESS countStr[0,0] THEN (maxY[0,0] - 1):
+                help[0,0] = countStr[0,0]
+                help[0,0] = help[0,0] + 1
+                    IFZERO fillmap[ help[0,0], countRow[0,0] ]:
+
+                        fillmap[ help[0,0], countRow[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+                IFHIGH countRow[0,0] THEN 0:
+                help[0,0] = countRow[0,0]
+                help[0,0] = help[0,0] - 1
+                    IFZERO fillmap[ countStr[0,0], help[0,0] ]:
+
+                        fillmap[ countStr[0,0], help[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+
+                IFLESS countRow[0,0] THEN (maxX[0,0] - 1):
+                help[0,0] = countRow[0,0]
+                help[0,0] = help[0,0] + 1
+                    IFZERO fillmap[ countStr[0,0], help[0,0] ]:
+
+                        fillmap[ countStr[0,0], help[0,0] ] = weight[0,0]
+
+                    ENDIF
+                ENDIF
+
+
+                help[0,0] = countStr[0,0] - extCord[0,0]
+                help[0,1] = countRow[0,0] - extCord[0,1]
+                IFLESS help[0,0] THEN 0:
+                    help[0,0] = - help[0,0]
+                ENDIF
+                IFLESS help[0,1] THEN 0:
+                    help[0,1] = - help[0,1]
+                ENDIF
+                help[0,0] = help[0,0] + help[0,1]
+                IFZERO (help[0,0] - 1):
+                    PRINT cicl
+                    fillmap[extCord[0,0],extCord[0,1]] = weight[0,0]
+                    cicl[0,0] = FALSE
+                ENDIF
+            ENDIF
+        countRow[0,0] = countRow[0,0] + 1
+        IFNLESS countRow[0,0] THEN maxX[0,0]:
+            countRow[0,0] = FALSE
+        ENDIF
+        ENDW
+
+    countRow[0,0] = 0
+    countRow[0,0] = TRUE
+    countStr[0,0] = countStr[0,0] + 1
+    IFNLESS countStr[0,0] THEN maxY[0,0]:
+        countStr[0,0] = FALSE
+    ENDIF
+    ENDW
+
+    countStr[0,0] = 0
+    countStr[0,0] = TRUE
+    cicl[0,0] = cicl[0,0] + 1
+    IFNLESS cicl[0,0] THEN cicl[1,0]:
+        cicl[0,0] = FALSE
+    ENDIF
+ENDW
+fillmap[7,1] = 'EXIT'
+PRINT fillmap
+
+VARIANT skip[1,1] = {{TRUE,0,''}}
+PRINT weight
+VARIANT com[1,1] = {{TRUE,'',2}}
+
+
+
+WHILE weight[0,0]:
+    weight[0,0] = weight[0,0] - 1
+    skip[0,0] = 0
+
+    IFHIGH extCord[0,0] THEN 0:
+        help[0,0] = extCord[0,0]
+        help[0,0] = help[0,0] - 1
+        IFZERO fillmap[ help[0,0], extCord[0,1] ] - weight[0,0]:
+            extCord[0,0] = extCord[0,0] - 1
+            com[0,0] = com[0,0] + 'DOWN '
+            skip[0,0] = 1
+        ENDIF
+    ENDIF
+    IFZERO skip[0,0]:
+        help[0,0] = maxY[0,0] - 1
+        IFLESS extCord[0,0] THEN help[0,0]:
+            help[0,0] = extCord[0,0]
+            help[0,0] = help[0,0] + 1
+            IFZERO fillmap[ help[0,0], extCord[0,1]] - weight[0,0]:
+                extCord[0,0] = extCord[0,0] + 1
+                com[0,0] = com[0,0] + 'UP '
+                skip[0,0] = 1
+            ENDIF
+        ENDIF
+    ENDIF
+
+    IFZERO skip[0,0]:
+
+        IFHIGH extCord[0,1] THEN 0:
+            help[0,0] = extCord[0,1]
+            help[0,0] = help[0,0] - 1
+            IFZERO fillmap[ extCord[0,0],  help[0,0]] - weight[0,0]:
+                extCord[0,1] = extCord[0,1] - 1
+                com[0,0] = com[0,0] + 'RIGHT '
+                skip[0,0] = 1
+            ENDIF
+        ENDIF
+    ENDIF
+
+    IFZERO skip[0,0]:
+        help[0,0] = maxX[0,0] - 1
+        IFLESS extCord[0,1] THEN help[0,0]:
+            help[0,0] = extCord[0,1]
+            help[0,0] = help[0,0] + 1
+            IFZERO fillmap[ extCord[0,0], help[0,0] ] - weight[0,0]:
+                extCord[0,1] = extCord[0,1] + 1
+                com[0,0] = com[0,0] + 'LEFT '
+            ENDIF
+        ENDIF
+    ENDIF
+
+IFZERO weight[0,0]:
+    weight[0,0] = FALSE
+ENDIF
+
+ENDW
+PRINT check
+PRINT com[0,0]
+COMMAND com[0,0]
+PRINT map
+'''
 
 
 

@@ -27,18 +27,30 @@ class bypass_ast:
             '/'  : lambda x, y: x / y
         }
 
-        self.robot_coord = [2, 2]
+        self.robot_coord = [1, 1]
 
     def Read(self):
-        self.decl_buf['global']['map'] = [[['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['',0,True],      ['',0,True],      ['',0,True],      ['',0,True],      ['',0,True],       ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['',0,True],      ['',0,True],      ['',0,True],      ['',0,True],      ['',0,True],       ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['',0,True],      ['',0,True],      ['WALL',-1,False],['',0,True],      ['',0,True],       ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['',0,True],      ['',0,True],      ['WALL',-1,False],['',0,True],      ['',0,True],       ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['WALL',-1,False],['WALL',-1,False],['WALL',-1,False],['',0,True],      ['',0,True],       ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['',0,True],      ['WALL',-1,False],['WALL',-1,False],['',0,True],      ['',0,True],       ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['EXIT',0,True],  ['',0,True],      ['',0,True],      ['',0,True],      ['',0,True],       ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['WALL',-1,False],['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]]  ]
+        self.decl_buf['global']['map'] = [[['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['FLOORS',0,True], ['EXIT',0,True],    ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+                                          [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]]  ]
+
+        # self.decl_buf['global']['map'] =  [[['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['FLOORS',0,True], ['FLOORS',0,True], ['WALL',-1,False],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['FLOORS',0,True], ['FLOORS',0,True], ['WALL',-1,False],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['FLOORS',0,True], ['WALL',-1,False], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['FLOORS',0,True], ['WALL',-1,False], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['WALL',-1,False], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['EXIT',0,True],    ['WALL',-1,False]],
+        #                                  [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]] ]
 
         self.decl_buf['global']['map'][self.robot_coord[0]][self.robot_coord[1]] = ['BOT',1,True]
         self.decl_buf['global']['fillmap'] = copy.deepcopy(self.decl_buf['global']['map'])
@@ -48,13 +60,13 @@ class bypass_ast:
         for point in self.decl_buf['global']['map'][i][j]:
             if point == 'WALL':
                 return False,look
-            if point == 'EXIT' and look == False:
+            if point == 'EXIT' and look == None:
                 print('*****************************************************')
                 print('<<<<<<<<<<<<<<<<<<< Exit reached! >>>>>>>>>>>>>>>>>>>')
                 print('*****************************************************')
                 print('')
-                self._error_flag = True
-                self._ret_flag = True
+                #self._error_flag = True
+                #self._ret_flag = True
                 return True,True
             if point == 'EXIT' and look == True:
                 return True,True
@@ -82,14 +94,19 @@ class bypass_ast:
             return
         #print('ret_val: ',n.ret_val)
         comand = self.visit(n.operator,scope_name,typo='str')
-
+        flajok = False
+        if comand.endswith(' '):
+            flajok = True
+            comand = comand[:-1]
         check_command = []
         if comand.find(' ') > -1:
             check_command = comand.split(' ')
         else:
             check_command.append(comand)
-        #print('oper: ',comand)
-
+        #print('oper: ',check_command)
+        if flajok == True:
+            check_command.reverse()
+        #print('oper: ',check_command)
         for chr in check_command:
             if chr not in self.robot_commands:
                 print('This command does not exist > ', chr)
@@ -235,6 +252,8 @@ class bypass_ast:
         if self._ret_flag == True:
             return
         #n.value = n.value[1:-1]
+        n.value = n.value.replace("'",'')
+        #print('str: ',n.value)
         return n.value
         #return (str(n.value))
 
