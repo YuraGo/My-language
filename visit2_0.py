@@ -234,7 +234,7 @@ class bypass_ast:
     def visit_String(self, n, scope_name='global',typo=None):
         if self._ret_flag == True:
             return
-        n.value = n.value[1:-1]
+        #n.value = n.value[1:-1]
         return n.value
         #return (str(n.value))
 
