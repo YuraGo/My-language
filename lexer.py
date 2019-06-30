@@ -5,6 +5,7 @@ from ply.lex import TOKEN
 
 
 class Lexer:
+
     def __init__(self, error_func):
         self.error_func = error_func
         self.filename = ''
@@ -36,13 +37,11 @@ class Lexer:
     def _make_tok_location(self, token):
         return (token.lineno, self.find_tok_column(token))
 
-    """Ключевые слова, у которых регулярное выражение совпадает с названием"""
     tok = (
             'IFLESS','IFNLESS','IFZERO','IFNZERO','IFHIGH','IFNHIGH','THEN',
             'ENDIF','WHILE','UNTIL','ENDW','ENDU','COMMAND','TO','BOOL',
             'TRUE','FALSE','CONVERT','FUNC','ENDFUNC','RETURN','STRINGTYPE',
-            'CALL','VARIANT','UP','DOWN','LEFT','RIGHT','LOOKUP','DIGITTYPE',
-            'LOOKDOWN','LOOKRIGHT','LOOKLEFT','PARAM','DIGITIZE','PRINT'
+            'CALL','VARIANT','DIGITTYPE','PARAM','DIGITIZE','PRINT'
             )
 
     keyword_map = {}
@@ -52,27 +51,25 @@ class Lexer:
 
     tokens = tok + (
         'MINUS', 'PLUS',
-        'LPAREN', 'RPAREN',         # ( )
-        'LBRACKET', 'RBRACKET',     # [ ], .
-        'LBRACE', 'RBRACE',      # { }
+        'LPAREN', 'RPAREN',
+        'LBRACKET', 'RBRACKET',
+        'LBRACE', 'RBRACE',
         'COMMA',
         'ID', 'NEWLINE',  'DIGIT',
         'EQUALS',
         'SEMICOLON','COLON',
-        'TIMES','DIVIDE','STRING','QUOTE' # "
+        'TIMES','DIVIDE','STRING'
     )
 
     identifier = r'[a-zA-Z_][0-9a-zA-Z_]*'
 
     t_ignore = ' \t'
 
-    # Newlines
     def t_NEWLINE(self, t):
         r'\n+'
         t.lexer.lineno += t.value.count("\n")
         return t
 
-    # t_DT                = r'[0-9]*'
     t_DIGIT             = r'0|([1-9][0-9]*)'
     t_PLUS              = r'\+'
     t_MINUS             = r'\-'
@@ -88,29 +85,22 @@ class Lexer:
     t_COLON             = r':'
     t_TIMES             = r'\*'
     t_DIVIDE            = r'/'
-    t_QUOTE             = r'"'
+
 
     @TOKEN(identifier)
     def t_ID(self, t):
-        t.type = self.keyword_map.get(t.value, "ID")#Ищет в словаре, если не нашел, возвращает ID - дефол значение
+        t.type = self.keyword_map.get(t.value, "ID")
         return t
 
     def t_STRING(self,t):
-        r"'([^\\']+|\\'|\\\\)*'"  # I think this is right ...
-        #t.value = t.value[1:-1].decode("string-escape")  # .swapcase() # for fun
+        r"'([^\\']+|\\'|\\\\)*'"
+        #t.value = t.value[1:-1].decode("string-escape")
         #t.value = str(t.value)
         return t
-
-    # @TOKEN(digit)
-    # def t_DIGIT(self, t):
-    #     # t.type = "digit"
-    #     return t
-
 
     def t_error(self, t):
         msg = 'Illegal character %s' % repr(t.value[0])
         self._error(msg, t)
-
 
     def pprint(self):
         while True:

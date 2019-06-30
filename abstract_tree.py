@@ -119,11 +119,12 @@ class Suite(Unit):
         self.type = type
 
 class Convert(Unit):
-    __slots__ = ('setin', 'setout', 'array','__weakref__')
+    __slots__ = ('setin', 'setout', 'array','coord','__weakref__')
     def __init__(self, setin, setout,array,coord=None):
         self.setin = setin
         self.setout = setout
         self.array = array
+        self.coord = coord
 
 class Digitize(Unit):
     __slots__ = ('array','__weakref__')

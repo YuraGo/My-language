@@ -101,11 +101,21 @@ import visit2_0
 # '''
 
 # data='''
-# VARIANT my(1,1)
+# VARIANT my[1,1]
 # PRINT my
-# IFLESS my(0,2) THEN 5:
+# IFLESS my[0,2] THEN 5:
 # PRINT my
-# CONVERT BOOL TO STRINGTYPE my(5,5)
+# CONVERT BOOL TO STRINGTYPE my[5,5]
+# ENDIF
+# PRINT my
+# '''
+
+# data = '''
+# VARIANT my[1,1]
+# my[0,0] = my[0,0] + 5
+# IFLESS 6 THEN 8 : {
+# my[0,0] = my[0,0] + 5
+# CONVERT STRINGTYPE TO STRINGTYPE my[0,0]
 # ENDIF
 # PRINT my
 # '''
@@ -163,40 +173,6 @@ import visit2_0
 # '''
 
 
-# data = '''
-# FUNC Factor:
-# VARIANT new[1,1]
-# new = PARAM
-# new[0,0] = new[0,0] - 1
-# PRINT new
-# IFZERO new[0,0]:
-# PRINT new
-# RETURN new
-# ENDIF
-# new = CALL Factor (new)
-# ENDFUNC
-#
-# VARIANT tr[1,1] = {{3,'factorial',TRUE}}
-# PRINT tr
-# tr = CALL Factor (tr)
-# PRINT tr
-# '''
-
-
-# data = '''
-# FUNC Factor:
-# VARIANT new[1,1]
-# new = PARAM
-# new[0,0] = new[0,0] - 1
-# PRINT new
-# RETURN new
-# ENDFUNC
-#
-# VARIANT tr[1,1] = {{3,'factorial',TRUE}}
-# PRINT tr
-# tr = CALL Factor (tr)
-# PRINT tr
-# '''
 
 
 # data = '''
@@ -238,18 +214,16 @@ import visit2_0
 # print ("factorial of 5 is ",f)
 
 
-data = '''
-VARIANT com[1,1] = { {'LEFT LOOKDOWN',TRUE,2} }
-VARIANT str[2,2] = { {'asd www zxc 56 asd'},{'www',FALSE,88;99} }
-com[0,0] = com[0,0] + ' DOWN'
-PRINT str
-str[2,0] = COMMAND com[0,0]
-str[3,0] = COMMAND 'LOOKRIGHT'
-str[4,0] = COMMAND 'LOOKLEFT'
-str[5,0] = COMMAND 'LOOKUP'
-PRINT str
-PRINT map
-'''
+# data = '''
+# VARIANT com[1,1] = { {'LOOKDOWN',TRUE,2} }
+# VARIANT str[2,2] = { {'asd www zxc 56 asd'},{'www',FALSE,88;99} }
+# PRINT map
+# str[2,0] = COMMAND com[0,0]
+# str[3,0] = COMMAND 'LOOKRIGHT'
+# COMMAND 'RIGHT'
+# PRINT str
+# PRINT map
+# '''
 
 # VARIANT extCord[1,2] = {{TRUE,'', 9; TRUE,'',5}}
 # VARIANT maxY[1,1] = {{11,'',TRUE}}
@@ -274,7 +248,6 @@ VARIANT help[1,1]
 VARIANT check[1,1]
 
 cicl[1,0] = maxY[0,0] * maxX[0,0]
-PRINT cicl
 pathArr[2,2] = 'BOT'
 VARIANT cord[1,2] = { {2,FALSE,'' ; 2,FALSE,''} }
 VARIANT weight[1,1] = {{1,'FLOORS',TRUE}}
@@ -365,7 +338,8 @@ WHILE cicl[0,0]:
         cicl[0,0] = FALSE
     ENDIF
 ENDW
-fillmap[7,1] = 'EXIT'
+
+
 PRINT fillmap
 
 VARIANT skip[1,1] = {{TRUE,0,''}}
@@ -425,22 +399,25 @@ WHILE weight[0,0]:
         ENDIF
     ENDIF
 
-IFZERO weight[0,0]:
-    weight[0,0] = FALSE
-ENDIF
-
+    IFZERO weight[0,0]:
+        weight[0,0] = FALSE
+    ENDIF
 ENDW
-PRINT check
-PRINT com[0,0]
+
 COMMAND com[0,0]
 PRINT map
 '''
 
-
+#
 
 
 result = build_tree(data)
 #print(result)
+f = open('treeR.txt', 'w')
+for line in str(result):
+    f.write(line)
+f.close()
+
 
 exec = visit2_0.bypass_ast()
 exec.Read()

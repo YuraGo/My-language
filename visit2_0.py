@@ -30,15 +30,36 @@ class bypass_ast:
         self.robot_coord = [1, 1]
 
     def Read(self):
-        self.decl_buf['global']['map'] = [[['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['FLOORS',0,True], ['EXIT',0,True],    ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
-                                          [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]]  ]
+        testM = []
+        testStr = []
+        f = open('mapf.txt')
+        #for line in f:
+        fd = f.readlines()
+        f.close()
+        #print(fd)
+        for strone in fd:
+            testStr = []
+            strone = strone.replace('\n','')
+            newS = strone.split(',')
+            #print(newS)
+            for i in newS:
+                if i == '-1':
+                    testStr.append(['WALL',-1,False])
+                if i == ' 0':
+                    testStr.append(['FLOORS',0,True])
+            testM.append(copy.deepcopy(testStr))
+
+        #print(testM)
+        self.decl_buf['global']['map'] = copy.deepcopy(testM)
+        # self.decl_buf['global']['map'] = [[['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['FLOORS',0,True], ['EXIT',0,True],    ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
+        #                                   [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]]  ]
 
         # self.decl_buf['global']['map'] =  [[['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]],
         #                                  [['WALL',-1,False], ['FLOORS',0,True], ['WALL',-1,False],  ['FLOORS',0,True], ['FLOORS',0,True], ['WALL',-1,False],  ['WALL',-1,False]],
@@ -51,7 +72,7 @@ class bypass_ast:
         #                                  [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['FLOORS',0,True],  ['WALL',-1,False]],
         #                                  [['WALL',-1,False], ['FLOORS',0,True], ['FLOORS',0,True],  ['FLOORS',0,True], ['FLOORS',0,True], ['EXIT',0,True],    ['WALL',-1,False]],
         #                                  [['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False], ['WALL',-1,False], ['WALL',-1,False],  ['WALL',-1,False]] ]
-
+        self.decl_buf['global']['map'][7][2] = ['EXIT',0,True]
         self.decl_buf['global']['map'][self.robot_coord[0]][self.robot_coord[1]] = ['BOT',1,True]
         self.decl_buf['global']['fillmap'] = copy.deepcopy(self.decl_buf['global']['map'])
 
@@ -81,8 +102,8 @@ class bypass_ast:
 
         i = self.robot_coord[0]
         j = self.robot_coord[1]
-        self.decl_buf['global']['map'][i][j] = ['',0,True]
-        self.decl_buf['global']['map'][new_i][new_j] = ['BOT',8,True]
+        self.decl_buf['global']['map'][i][j][0] = 'FLOORS'
+        self.decl_buf['global']['map'][new_i][new_j][0] = 'BOT'
         self.robot_coord[0] = new_i
         self.robot_coord[1] = new_j
         return True
@@ -298,9 +319,10 @@ class bypass_ast:
                 return
             cnt += 1
 
-            ret = self.visit(n.stmt,scope_name)
+            ret = self.visit(n.stmt,scope_name,'ENDW')
             #print(ret)
             if ret is not None:
+                print('Error while')
                 return ret
 
             condition = self.visit(n.cond, scope_name,'bool')
@@ -329,7 +351,7 @@ class bypass_ast:
                 return
             cnt += 1
 
-            ret = self.visit(n.stmt,scope_name)
+            ret = self.visit(n.stmt,scope_name,'ENDU')
             #print(ret)
             if ret is not None:
                 return ret
@@ -341,6 +363,13 @@ class bypass_ast:
         self.visit(n.stmt,scope_name)
 
     def visit_Suite(self, n,scope_name='global',typo=None):
+        if n.type != typo:
+            self._error_flag = True
+            print('Error, type missmatch')
+        if self._error_flag:
+            return
+        if n.coord:
+            return
         #print("BLOCK", n.block_items)
         if self._ret_flag == True:
             return
@@ -362,13 +391,13 @@ class bypass_ast:
             flag = True
             if cond == 0:
                 #print('yaaa')
-                return self.visit_Suite(n.iftrue,scope_name)
+                return self.visit_Suite(n.iftrue,scope_name,'ENDIF')
             else : condition = None
         if n.type == 'IFNZERO':
             flag = True
             #print('IFNZERO cond: ',cond)
             if cond != 0:
-                return self.visit_Suite(n.iftrue,scope_name)
+                return self.visit_Suite(n.iftrue,scope_name,'ENDIF')
             else : condition = None
 
         #if not condition:
@@ -381,6 +410,8 @@ class bypass_ast:
         if self._error_flag:
             print('_error_flag in If')
             return
+        if n.coord == True:
+            return
         flag = False
         #print(n)
         condleft = self.visit(n.cond,scope_name,'digit')
@@ -392,23 +423,23 @@ class bypass_ast:
         if n.type == 'IFLESS':
             flag = True
             if condleft < condright:
-                return self.visit_Suite(n.iftrue,scope_name)
+                return self.visit_Suite(n.iftrue,scope_name,'ENDIF')
             else : return
         if n.type == 'IFNLESS':
             flag = True
             if condleft >= condright:
-                return self.visit_Suite(n.iftrue,scope_name)
+                return self.visit_Suite(n.iftrue,scope_name,'ENDIF')
             else : return
         if n.type == 'IFHIGH':
             flag = True
             if condleft > condright:
                 #print('yaaa')
-                return self.visit_Suite(n.iftrue,scope_name)
+                return self.visit_Suite(n.iftrue,scope_name,'ENDIF')
             else : return
         if n.type == 'IFNHIGH':
             flag = True
             if condleft <= condright:
-                stmt = self.visit_Suite(n.iftrue,scope_name)
+                stmt = self.visit_Suite(n.iftrue,scope_name,'ENDIF')
                 #print('rrrrrrrr',stmt)
                 return stmt
             else : return
@@ -447,6 +478,8 @@ class bypass_ast:
 
     def visit_Variant(self,n,scope_name='global',typo=None):
         if self._ret_flag == True:
+            return
+        if n.coord == True:
             return
         VarName = n.name.name
         #print(VarName)
@@ -689,6 +722,8 @@ class bypass_ast:
     def visit_Convert(self,n,scope_name='global',typo=None):
         #print('? --->')
         #print(n.array)
+        if n.coord == True:
+            return
         if self._ret_flag == True:
             return
         varArr = self.visit(n.array,scope_name)
@@ -989,13 +1024,7 @@ class bypass_ast:
         else: return 'var'
 
     def visit_FunctionDict(self, n, scope_name='global',typo=None):
-        # Добавлю новую область видимости
         self.decl_buf[n.name.name] = {}
-        # Добавил аргументы в словарь
-        #print("visit_FunctionDict : ",n.name.name)
-        #self.visit(n.suite, n.name.name)
-        # Добавил возвращаемые значения в словарь
-        #self.visit(n.ret_values, n.name.name)
 
     def visit_Param(self,n,scope_name,typo=None):
         #print('param: ',scope_name)
@@ -1052,16 +1081,15 @@ class bypass_ast:
         #     self._error_flag = True
         #     return
 
-        # увеличивая переменную для количества вызовов функции
         #print('function_dict[n.name.name][0]:  ',function_dict[n.name.name][1])
         function_dict[n.name.name][1] += 1
         count = function_dict[n.name.name][1]
         self._global_count = count
 
-        # формирую новое имя для области видимости имяфункции + _ +глубина рекурсии
+
         new_scope_name = n.name.name + "_" + str(count)
         #print('new_scope_name: ',new_scope_name)
-        # копирую словарь из области видимости, которой была вызвана функция
+
         self.decl_buf[new_scope_name] = copy.deepcopy(self.decl_buf[n.name.name])
         #print('skok? ')
         #print('self.decl_buf[new_scope_name]',self.decl_buf[new_scope_name])
@@ -1088,16 +1116,14 @@ class bypass_ast:
         #print('self.decl_buf[scope_name]  ',self.decl_buf[new_scope_name])
 
         #print('func_dict[0].suite',func_dict)
-        self.visit(func_dict[0].suite, new_scope_name)
+        self.visit(func_dict[0].suite, new_scope_name,'ENDFUNC')
         self._ret_flag = False
         #return
         #print('self.decl_buf[scope_name]  ',self.decl_buf[new_scope_name])
         #print('self.decl_buf[scope_name]  ',self.decl_buf[new_scope_name].get('return'))
-        # удаляю область видимости при выходе из функции
         ret_value = copy.deepcopy(self.decl_buf[new_scope_name].get('return'+str(self._global_count)))
         #print('ret: ',ret_value)
         del self.decl_buf[new_scope_name]
-        # уменьшая счетчик глубины рекурсии
         function_dict[n.name.name][1] -= 1
         self._global_count = function_dict[n.name.name][1]
         #print('callvar: ',n.callvar)

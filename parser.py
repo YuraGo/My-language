@@ -6,10 +6,12 @@ from lexer import Lexer
 
 function_dict = {}
 
+
 class ParseError(Exception): pass
 
 
 def parse_error(self, msg, coord):
+    print('tyt???')
     raise ParseError("%s: %s" % (coord, msg))
 
 buffer = Lexer(parse_error)
@@ -17,7 +19,6 @@ buffer.run()
 tokens = buffer.tokens
 
 
-#ПРИОРИТЕТ ТОКЕНОВ
 precedence = (
     ('left',  'EQUALS'),
     ('left', 'PLUS', 'MINUS'),
@@ -86,6 +87,7 @@ def p_small_stmt(p):
     p[0] = p[1]
 
 
+
 def p_robot_operators(p):
     ''' robot_operators : COMMAND robot_commands
                         '''
@@ -103,11 +105,10 @@ def p_full_expression(p):
     p[0] = p[2]
 
 def p_expression(p):
-    """ expression  : assignment_expression
-        """
+    ''' expression  : assignment_expression
+        '''
     # print("In expression", p[1])
-    if len(p) == 2:
-        p[0] = p[1]
+    p[0] = p[1]
 
 def p_assignment_expression(p):
     ''' assignment_expression : binary_expression
@@ -118,7 +119,7 @@ def p_assignment_expression(p):
     p[0] = p[1]
 
 def p_binary_expression(p):
-    """ binary_expression   : variant_call TIMES variant_call
+    ''' binary_expression   : variant_call TIMES variant_call
                             | variant_call DIVIDE variant_call
                             | variant_call MINUS variant_call
                             | variant_call PLUS variant_call
@@ -127,8 +128,9 @@ def p_binary_expression(p):
                             | variant_call MINUS digit
                             | variant_call TIMES digit
                             | variant_call DIVIDE digit
-        """
+        '''
     p[0] = ast.BinaryOp(p[2], p[1], p[3],p[1].coord)
+
 
 def p_expression_uminus(p):
     '''unary_expression : MINUS var_var %prec UMINUS
@@ -136,19 +138,29 @@ def p_expression_uminus(p):
     p[0] = ast.UnaryOp(p[2])
 
 def p_compound_stmt(p):
-    """compound_stmt : if_stmt
+    '''compound_stmt : if_stmt
                      | while_stmt
-                     | until_stmt"""
+                     | until_stmt'''
     p[0] = p[1]
 
 def p_if_stmt_1(p):
     #              1         2       3     4          5     6
-    """if_stmt : IFLESS  expression THEN expression  suite pass_new_line
+    '''if_stmt : IFLESS  expression THEN expression  suite pass_new_line
                | IFNLESS expression THEN expression  suite pass_new_line
                | IFHIGH  expression THEN expression  suite pass_new_line
                | IFNHIGH expression THEN expression  suite pass_new_line
-               """
+               '''
     p[0] = ast.If(p[1], p[2], p[4], p[5], None)
+
+def p_if_stmt_error(p):
+    '''if_stmt : IFLESS  expression THEN expression LBRACE suite pass_new_line
+               | IFNLESS expression THEN expression LBRACE suite pass_new_line
+               | IFHIGH  expression THEN expression LBRACE suite pass_new_line
+               | IFNHIGH expression THEN expression LBRACE suite pass_new_line
+                 '''
+
+    print('Unexpected symbol "%s" on line %d' % (str(p[5]),p.lineno(1)))
+    p[0] = ast.If(p[1], p[2], p[4], p[6], True)
 
 def p_if_stmt_2(p):
     ''' if_stmt : IFZERO expression suite pass_new_line
@@ -156,24 +168,42 @@ def p_if_stmt_2(p):
     p[0] = ast.IfZero(p[1],p[2],p[3])
 
 def p_while_stmt(p):
-    """while_stmt : WHILE expression suite pass_new_line"""
+    '''while_stmt : WHILE expression suite pass_new_line'''
     p[0] = ast.While(p[2], p[3], None)
+
+def p_while_stmt_error(p):
+    '''while_stmt : WHILE expression LBRACE suite pass_new_line'''
+    print('Unexpected symbol "%s" on line %d' % (str(p[3]),p.lineno(1)))
+    p[0] = ast.While(p[2], p[3], True)
+
+
+def p_while_stmt_error_2(p):
+    '''while_stmt : WHILE expression suite RBRACE pass_new_line'''
+    print('Unexpected symbol "%s" on line %d' % (str(p[4]),p.lineno(1)))
+    p[0] = ast.While(p[2], p[3], True)
+
 
 def p_until_stmt(p):
     '''until_stmt : UNTIL expression suite pass_new_line '''
     p[0] = ast.Until(p[2],p[3],None)
 
 def p_suite_2(p):
-    """suite : COLON pass_new_line big_stmt pass_new_line ENDIF
+    '''suite : COLON pass_new_line big_stmt pass_new_line ENDIF
              | COLON pass_new_line big_stmt pass_new_line ENDW
              | COLON pass_new_line big_stmt pass_new_line ENDU
-             | COLON pass_new_line big_stmt pass_new_line ENDFUNC"""
+             | COLON pass_new_line big_stmt pass_new_line ENDFUNC'''
     p[0] = ast.Suite(p[3], p[5],None)
     #print("In suite2", p[0])
 
+def p_suite_2_errors(p):
+    '''suite : COLON LBRACE pass_new_line big_stmt pass_new_line ENDIF'''
+    print('Unexpected symbol "%s" on line %d' % (str(p[2]),p.lineno(1)))
+    p[0] = ast.Suite(p[3], p[6], True)
+
 def p_big_stmt(p):
-    """big_stmt :  pass_new_line"""
+    '''big_stmt :  pass_new_line'''
     p[0] = []
+
 
 def p_param(p):
     ''' param : identifier EQUALS PARAM '''
@@ -211,22 +241,21 @@ def p_call_function_eq_none(p):
     p[0] = ast.CallFunction(p[4],None,p[1])
 
 def p_big_stmt_1(p):
-    """big_stmt : statement"""
+    '''big_stmt : statement'''
     p[0] = [p[1]]
 
-# Нужно немного переделать Suite, чтобы было сегче обрабатывать
 def p_big_stmt_2(p):
-    """big_stmt :  big_stmt statement"""
+    '''big_stmt :  big_stmt statement'''
     p[1].append(p[2])
     p[0] = p[1]
 
 def p_pass_new_line(p):
-    """pass_new_line : empty
-                     | NEWLINE"""
+    '''pass_new_line : empty
+                     | NEWLINE'''
     p[0] = []
 
 def p_empty(p):
-    """empty : """
+    '''empty : '''
     p[0] = ast.EmptyStatement()
 
 def p_identifier(p):
@@ -237,7 +266,9 @@ def p_identifier(p):
 def p_convert(p):
     #                1      2             3     4            5
     ''' convert : CONVERT type_specifier TO type_specifier variant_call'''
-    p[0] = ast.Convert(p[2],p[4],p[5])
+    if p[2] == p[4]:
+        print('This operation does not make sence on line %d, the same type in CONVERT' %(p.lineno(1)))
+    p[0] = ast.Convert(p[2],p[4],p[5],True)
     #print()
 
 def p_digitize(p):
@@ -274,6 +305,12 @@ def p_variable(p):
     ''' variable : VARIANT identifier LBRACKET digit COMMA digit RBRACKET'''
     p[0] = ast.Variant(p[2], p[4], p[6])
 
+def p_variable_error(p):
+    ''' variable : VARIANT identifier LBRACKET string COMMA string RBRACKET
+                 | VARIANT identifier LBRACKET bool   COMMA bool RBRACKET'''
+    print('Error on line %d, dimension can only be specified in digits' %(p.lineno(1)))
+    p[0] = ast.Variant(p[2], p[4], p[6],None,True)
+
 def p_variable_1(p):
     #                1           2      3     4     5       6    7        8    9         10       11
     ''' variable : VARIANT identifier LBRACKET digit COMMA digit RBRACKET EQUALS LBRACE var_full_list RBRACE '''
@@ -288,8 +325,7 @@ def p_var_var(p):
     p[0] = [(p[1])]
 
 def p_print(p):
-    ''' print : PRINT expression
-              | PRINT identifier
+    ''' print : PRINT identifier
               | PRINT variant_call'''
     p[0] = ast.Printed(p[2])
 
@@ -329,7 +365,7 @@ def p_string(p):
     p[0] = ast.String(p[1],None)
 
 def p_digit(p):
-    """ digit : DIGIT"""
+    ''' digit : DIGIT'''
     p[0] = ast.Digit( p[1], None)
 
 def p_bool(p):
